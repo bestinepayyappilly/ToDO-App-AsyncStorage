@@ -53,18 +53,11 @@ const AddTodo = ({List}) => {
 
   const handleAddTodo = input => {
     if (input) {
-      setList([
-        ...list,
-        {
-          data: input,
-          time: time.toString(),
-          id: Math.floor(Math.random() * 100),
-        },
-      ]);
       storeTasks('hola', {
         data: input,
         time: time.toString(),
         id: Math.floor(Math.random() * 100),
+        completed: false,
       });
       updateList();
 
@@ -102,7 +95,7 @@ const AddTodo = ({List}) => {
             width: width,
             justifyContent: 'space-between',
             paddingHorizontal: 10,
-            height: 50,
+            maxHeight: height / 8,
           }}>
           <Input
             onChangeText={e => {
@@ -113,7 +106,7 @@ const AddTodo = ({List}) => {
             placeholder="Add a Task"
             multiline={true}
             containerStyle={{
-              borderRadius: 10,
+              borderRadius: 5,
               flex: 2,
               height: '100%',
               marginHorizontal: 5,
@@ -128,11 +121,10 @@ const AddTodo = ({List}) => {
               handleAddTodo(input);
             }}
             style={{
-              height: '90%',
+              height: '100%',
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-
               borderRadius: 5,
               backgroundColor: '#212527',
               maxWidth: 40,
