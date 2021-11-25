@@ -28,7 +28,9 @@ const AddTodo = ({List}) => {
   const getTasks = () => {
     AsyncStorage.getItem('hola')
       .then(e => {
-        setPrevTodo(e);
+        if (e !== null) {
+          setPrevTodo(e);
+        }
       })
       .catch(e => alert(e));
   };
