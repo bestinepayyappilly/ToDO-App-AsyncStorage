@@ -15,7 +15,7 @@ import {Input} from 'react-native-elements';
 
 const AddTodo = ({List}) => {
   const [input, setInput] = useState(null);
-  const [list, setList] = useState(null);
+  const [list, setList] = useState([]);
   const [prevTodo, setPrevTodo] = useState(null);
   var time = new Date();
 
