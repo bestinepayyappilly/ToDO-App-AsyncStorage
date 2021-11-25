@@ -8,11 +8,11 @@ const {width, height} = Dimensions.get('screen');
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
+  const [prevTodo, setPrevTodo] = useState(null);
   const [List, setList] = useState(null);
   const pullList = (...data) => {
     if ([...data]) {
       setList([...data]);
-      // console.log(List.map(e => e.data));
     }
   };
 

@@ -29,24 +29,25 @@ const AddTodo = ({List}) => {
     AsyncStorage.getItem('hola')
       .then(e => {
         setPrevTodo(e);
-        console.log(list);
       })
-      .catch(e => console.log(e));
+      .catch(e => alert(e));
   };
 
   const updateList = async () => {
-    let response = await AsyncStorage.getItem('hola');
-    let tasks = (await JSON.parse(response)) || [];
+    await AsyncStorage.getItem('hola')
+      .then(value => {
+        if (value !== null) {
+          setList(JSON.parse(value));
+        }
+      })
 
-    setList(tasks);
-    console.log(tasks);
+      .catch(e => alert(e));
   };
 
   const storeTasks = (key, value) => {
     const taskList = [...list, value];
     if (value !== null) {
       AsyncStorage.setItem(key, JSON.stringify(taskList));
-      console.log(value);
     }
     updateList();
   };
@@ -67,36 +68,12 @@ const AddTodo = ({List}) => {
     }
   };
   return (
-    <View style={styles.headingContainer}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: '#f8f8f8',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text
-          style={[
-            {
-              fontSize: 30,
-              fontWeight: '700',
-              color: '#3c4043',
-              margin: 10,
-
-              textAlignVertical: 'center',
-              opacity: 0.9,
-            },
-          ]}>
+    <View style={styles.headerContainer}>
+      <View style={styles.headerChild}>
+        <Text style={styles.headerText}>
           Todo's <Text style={{color: '#188038'}}>App</Text>
         </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: width,
-            justifyContent: 'space-between',
-            paddingHorizontal: 10,
-            maxHeight: height / 8,
-          }}>
+        <View style={styles.textInputContainer}>
           <Input
             onChangeText={e => {
               setInput(e);
@@ -105,31 +82,15 @@ const AddTodo = ({List}) => {
             value={input}
             placeholder="Add a Task"
             multiline={true}
-            containerStyle={{
-              borderRadius: 5,
-              flex: 2,
-              height: '100%',
-              marginHorizontal: 5,
-              backgroundColor: '#ccf9',
-            }}
-            inputStyle={{fontSize: 20, fontWeight: '700'}}
+            containerStyle={styles.inputContainer}
+            inputStyle={styles.inputText}
             inputContainerStyle={{borderBottomWidth: 0}}
           />
-
           <TouchableOpacity
             onPress={() => {
               handleAddTodo(input);
             }}
-            style={{
-              height: '100%',
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 5,
-              backgroundColor: '#212527',
-              maxWidth: 40,
-              alignSelf: 'center',
-            }}>
+            style={styles.addButton}>
             <Ionicons name="add" color="#87FF65" size={30} />
           </TouchableOpacity>
         </View>
@@ -141,8 +102,48 @@ const AddTodo = ({List}) => {
 export default AddTodo;
 
 const styles = StyleSheet.create({
-  headingContainer: {
+  headerContainer: {
     flex: 1,
     alignItems: 'center',
   },
+  headerChild: {
+    flex: 1,
+    backgroundColor: '#f8f8f8',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  headerText: {
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#3c4043',
+    margin: 10,
+
+    textAlignVertical: 'center',
+    opacity: 0.9,
+  },
+  textInputContainer: {
+    flexDirection: 'row',
+    width: width,
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    maxHeight: height / 8,
+  },
+  inputContainer: {
+    borderRadius: 5,
+    flex: 2,
+    height: '100%',
+    marginHorizontal: 5,
+    backgroundColor: '#ccf9',
+  },
+  addButton: {
+    height: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    backgroundColor: '#212527',
+    maxWidth: 40,
+    alignSelf: 'center',
+  },
+  inputText: {fontSize: 20, fontWeight: '700'},
 });

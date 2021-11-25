@@ -21,42 +21,38 @@ const ListItem = ({AsyncList}) => {
   const [text, setText] = useState(null);
   const [edit, setEdit] = useState(null);
   const [List, setList] = useState(AsyncList);
-  const [checked, setChecked] = useState(false);
 
   var time = new Date();
 
+  const updateList = async () => {
+    await AsyncStorage.getItem('hola')
+      .then(value => {
+        if (value !== null) {
+          setList(JSON.parse(value));
+        }
+      })
+
+      .catch(e => alert(e));
+  };
+
   useEffect(() => {
-    // console.log('this is the asynclist:', AsyncList.sort().reverse());
     updateList();
   }, [AsyncList]);
 
   const handleDeleteTodo = async id => {
     let NewList = List.filter(e => e.id !== id);
-    console.log('newList:', NewList);
     await AsyncStorage.setItem('hola', JSON.stringify(NewList)).catch(e =>
-      console.log(e),
+      alert(e),
     );
-
     updateList();
-  };
-  const updateList = async () => {
-    let response = await AsyncStorage.getItem('hola');
-    let tasks = (await JSON.parse(response)) || [];
-
-    setList(tasks);
-    console.log(tasks);
   };
 
   const Completed = async (index, value) => {
     let NewList = List;
     NewList.splice(index, 1, value);
     await AsyncStorage.setItem('hola', JSON.stringify(NewList)).catch(e =>
-      console.log(e),
+      alert(e),
     );
-    console.log(index);
-    console.log(NewList.length);
-    console.log(NewList);
-
     updateList();
   };
 
@@ -64,20 +60,16 @@ const ListItem = ({AsyncList}) => {
     let NewList = List;
     NewList.splice(index, 1, value);
     await AsyncStorage.setItem('hola', JSON.stringify(NewList)).catch(e =>
-      console.log(e),
+      alert(e),
     );
-    console.log(index);
-    console.log(NewList.length);
-    console.log(NewList);
-
     setEdit(null);
   };
 
-  return List ? (
-    <View style={{flex: 1, justifyContent: 'center'}}>
+  return List !== [] ? (
+    <View style={styles.MainContainer}>
+      <Text style={styles.headingContainer}>To Do's</Text>
       <FlatList
-        // style={{marginBottom: 100}}
-        contentContainerStyle={{paddingBottom: 100}}
+        contentContainerStyle={styles.flatListContentContainer}
         showsVerticalScrollIndicator={false}
         data={List}
         keyExtractor={items => items.time}
@@ -86,9 +78,8 @@ const ListItem = ({AsyncList}) => {
             {
               text: 'Edit',
               backgroundColor: '#405DE6',
-
               onPress: () => {
-                setText(null);
+                setText(items.item.data);
                 setEdit(items.item.id);
               },
             },
@@ -97,29 +88,9 @@ const ListItem = ({AsyncList}) => {
             <View key={items.item.time} style={{width: '100%'}}>
               {items.item.id !== edit ? (
                 <Swipeout right={swipeoutBtns} autoClose={true}>
-                  <View
-                    style={{
-                      // width: '100%',
-                      // height: height / 15,
-                      flex: 1,
-                      backgroundColor: '#D4DCCD',
-
-                      padding: 10,
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}>
-                      <Text
-                        style={{
-                          color: '#000',
-                          fontWeight: '700',
-                          fontSize: 18,
-                          maxWidth: width / 1.5,
-                        }}>
+                  <View style={styles.listItemContainer}>
+                    <View style={styles.listHeaderContainer}>
+                      <Text style={styles.textStyleMain}>
                         {items.item.data}
                       </Text>
                       <View style={{flexDirection: 'row'}}>
@@ -141,13 +112,7 @@ const ListItem = ({AsyncList}) => {
                           />
                         </TouchableOpacity>
                         <TouchableOpacity
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'flex-end',
-                            backgroundColor: '#fff',
-                            padding: 5,
-                            borderRadius: 5,
-                          }}
+                          style={styles.mainDeleteTodo}
                           onPress={() => {
                             handleDeleteTodo(items.item.id);
                           }}>
@@ -155,69 +120,30 @@ const ListItem = ({AsyncList}) => {
                         </TouchableOpacity>
                       </View>
                     </View>
-                    <View
-                      style={{
-                        marginTop: 10,
-                        backgroundColor: '#f8f8f8',
-                        padding: 5,
-                        borderRadius: 5,
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          fontWeight: '700',
-                          color: '#000',
-                        }}>
+                    <View style={styles.textContainer1}>
+                      <Text style={styles.textStyle1}>
                         Created on : {items.item.time.substr(0, 25)}
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        marginTop: 10,
-                        backgroundColor: '#f8f8f8',
-                        padding: 5,
-                        borderRadius: 5,
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          fontWeight: '700',
-                          color: '#000',
-                        }}>
+                    <View style={styles.textContainer1}>
+                      <Text style={styles.textStyle1}>
                         {items.item.completed ? 'Completed' : 'In Progress'}
                       </Text>
                     </View>
                   </View>
                 </Swipeout>
               ) : (
-                <View
-                  style={{
-                    width: '100%',
-                    flex: 1,
-                    backgroundColor: '#F77737',
-                    padding: 10,
-                  }}>
+                <View style={styles.editContainer}>
                   <Input
                     multiline={true}
-                    value={null}
+                    value={text}
                     onChangeText={e => {
                       setText(e);
-                      console.log(e);
                     }}
                   />
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      backgroundColor: '#fff',
-                      borderRadius: 5,
-                      justifyContent: 'space-between',
-                    }}>
+                  <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                      style={{
-                        justifyContent: 'center',
-                        padding: 5,
-                        borderRadius: 5,
-                      }}
+                      style={styles.editTodo}
                       onPress={() => {
                         if (text) {
                           EditText(items.index, {
@@ -236,11 +162,7 @@ const ListItem = ({AsyncList}) => {
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={{
-                        justifyContent: 'center',
-                        padding: 5,
-                        borderRadius: 5,
-                      }}
+                      style={styles.deleteTodo}
                       onPress={() => {
                         handleDeleteTodo(items.item.id);
                       }}>
@@ -254,9 +176,80 @@ const ListItem = ({AsyncList}) => {
         }}
       />
     </View>
-  ) : null;
+  ) : (
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <Text>seems lonely</Text>
+    </View>
+  );
 };
 
 export default ListItem;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  MainContainer: {flex: 1, justifyContent: 'center'},
+  headingContainer: {
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#188038',
+    marginHorizontal: 10,
+    marginTop: 20,
+  },
+  flatListContentContainer: {paddingBottom: 100},
+  deleteTodo: {
+    justifyContent: 'center',
+    padding: 5,
+    borderRadius: 5,
+  },
+  editTodo: {
+    justifyContent: 'center',
+    padding: 5,
+    borderRadius: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    justifyContent: 'space-between',
+  },
+  editContainer: {
+    width: '100%',
+    flex: 1,
+    backgroundColor: '#F77737',
+    padding: 10,
+  },
+  textStyle1: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#000',
+  },
+  textContainer1: {
+    marginTop: 10,
+    backgroundColor: '#f8f8f8',
+    padding: 5,
+    borderRadius: 5,
+  },
+  mainDeleteTodo: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    backgroundColor: '#fff',
+    padding: 5,
+    borderRadius: 5,
+  },
+  textStyleMain: {
+    color: '#000',
+    fontWeight: '700',
+    fontSize: 18,
+    maxWidth: width / 1.5,
+  },
+  listHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  listItemContainer: {
+    flex: 1,
+    backgroundColor: '#D4DCCD',
+    padding: 10,
+  },
+});
