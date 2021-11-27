@@ -122,12 +122,21 @@ const ListItem = ({AsyncList}) => {
                       <Text style={styles.textStyle1}>
                         Created on : {items.item.time.substr(0, 25)}
                       </Text>
+                      <View
+                        style={{
+                          height: 15,
+                          width: 8,
+                          backgroundColor: items.item.completed
+                            ? 'blue'
+                            : 'red',
+                          borderRadius: 2,
+                        }}></View>
                     </View>
-                    <View style={styles.textContainer1}>
+                    {/* <View style={styles.textContainer1}>
                       <Text style={styles.textStyle1}>
                         {items.item.completed ? 'Completed' : 'In Progress'}
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                 </Swipeout>
               ) : (
@@ -223,8 +232,11 @@ const styles = StyleSheet.create({
   textContainer1: {
     marginTop: 10,
     backgroundColor: '#f8f8f8',
-    padding: 5,
+    padding: 10,
     borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   mainDeleteTodo: {
     justifyContent: 'center',

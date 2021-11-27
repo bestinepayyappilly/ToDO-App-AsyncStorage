@@ -34,7 +34,13 @@ const TaskComponent = ({List}) => {
   };
 
   return loading ? (
-    <View style={{flex: 1, backgroundColor: 'f8f8f8'}}>
+    <View
+      style={{
+        flex: 3,
+        backgroundColor: '#f8f8f8',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
       <ActivityIndicator size="large" color="#00ff00" />
     </View>
   ) : (
