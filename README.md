@@ -30,3 +30,6 @@
 
 
 Link to Video : https://github.com/bestinepayyappilly/TechnolutionAssignment/blob/main/ScreenShots%20and%20Videos/WhatsApp%20Video%202021-11-25%20at%2011.38.41%20PM.mp4
+
+
+Link to the apk : https://github.com/bestinepayyappilly/TechnolutionAssignment/tree/main/release
