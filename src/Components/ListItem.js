@@ -67,7 +67,7 @@ const ListItem = ({AsyncList}) => {
     <View style={styles.MainContainer}>
       <Text style={styles.headingContainer}>To Do's</Text>
       <FlatList
-        contentContainerStyle={styles.flatListContentContainer}
+        contentContainerStyle={{paddingBottom: 200}}
         showsVerticalScrollIndicator={false}
         data={List}
         keyExtractor={items => items.time}
@@ -183,11 +183,7 @@ const ListItem = ({AsyncList}) => {
         }}
       />
     </View>
-  ) : (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <Text>seems lonely</Text>
-    </View>
-  );
+  ) : null;
 };
 
 export default ListItem;
@@ -201,7 +197,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 20,
   },
-  flatListContentContainer: {paddingBottom: 100},
+
   deleteTodo: {
     justifyContent: 'center',
     padding: 5,
